@@ -50,8 +50,7 @@ public class Juego {
 
     PreparedStatement ps;
     ResultSet rs;
-    
-    
+
     /**
      * METODO QUE REALIZA LA CONEXION
      */
@@ -193,39 +192,38 @@ public class Juego {
                 } //validacion si los datos ingresados son iguales
                 else if (pla1.equals(pla2)) {
                     JOptionPane.showMessageDialog(null, "NOMBRES DE LOS JUGADORES REPETIDOS.\nFAVOR UTILIZAR DIFERENTES NOMBRES");
-                }
-                //****************************************************************************************
-                //  Ingreso de nombres de jugadores en BD
-                //*****************************************************************************************
-                Connection con = null;
+                } //valida  que el los nombres ingresados sean diferentes, sim son diferentes pasa a la siguiente ventana
+                else if (!pla1.equals(pla2)) {
+                    //****************************************************************************************
+                    //  Ingreso de nombres de jugadores en BD
+                    //*****************************************************************************************
+                    Connection con = null;
 
-                con = getConection();
+                    con = getConection();
 
-                try {
-                    ps = (PreparedStatement) con.prepareStatement("INSERT INTO juego (jugador1, jugador2, dataTime) VALUES(?,?,?)");
+                    try {
+                        ps = (PreparedStatement) con.prepareStatement("INSERT INTO juego (jugador1, jugador2, dataTime) VALUES(?,?,?)");
 
-                    ps.setString(1, player1.getText());
-                    ps.setString(2, player2.getText());
-                    LocalDateTime datatime = LocalDateTime.now();
-                    String fecha;
-                    fecha = String.valueOf(datatime);
-                    ps.setString(3,fecha);
-                    
-                    int resul = ps.executeUpdate();
+                        ps.setString(1, player1.getText());
+                        ps.setString(2, player2.getText());
+                        LocalDateTime datatime = LocalDateTime.now();
+                        String fecha;
+                        fecha = String.valueOf(datatime);
+                        ps.setString(3, fecha);
 
-                    //evalua si se guarda el resultado
-                    if (resul > 0) {
+                        int resul = ps.executeUpdate();
 
-                        JOptionPane.showMessageDialog(null, "NOMBRE DE JUGADORES GUARDADO");
+                        //evalua si se guarda el resultado
+                        if (resul > 0) {
 
-                    }
-                } catch (SQLException ex) {
-                    //Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "ERROR: "+ex);
-                }// try catch finconexion DB
+                            JOptionPane.showMessageDialog(null, "NOMBRE DE JUGADORES GUARDADO");
 
-                //valida  que el los nombres ingresados sean diferentes, sim son diferentes pasa a la siguiente ventana
-                if (!pla1.equals(pla2)) {
+                        }
+                    } catch (SQLException ex) {
+                        //Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, "ERROR: " + ex);
+                    }// try catch finconexion DB
+
                     panelBegin.setVisible(false);  //oculta el panel de inicio 
                     background.setIcon(new ImageIcon("imagenes/PNG/fondo6.png"));//cambiar imagen
                     panelPlay.add(background);//asigna un fondo nuevo
@@ -268,7 +266,7 @@ public class Juego {
                                                         player = 1;
                                                         name = pla1;
                                                         //obj.win(1," "+ pla1);
-                                                        turnPlayer.setText("Turno del jugador;  " + pla2 + " con la letra X");
+                                                        turnPlayer.setText("Turno del jugador:  " + pla2 + " con la letra X");
                                                         turn *= -1;
                                                     }//fin if turn
                                                     else {
@@ -276,7 +274,7 @@ public class Juego {
                                                         player = 2;
                                                         name = pla2;
                                                         //obj.win(2," "+ pla2);
-                                                        turnPlayer.setText("Turno del jugador;  " + pla1 + " con la letra O");
+                                                        turnPlayer.setText("Turno del jugador:  " + pla1 + " con la letra O");
 
                                                         turn *= -1;
                                                     }// fin else
